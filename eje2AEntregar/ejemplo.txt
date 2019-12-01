@@ -1,0 +1,8 @@
+  File: .
+  Size: 4096      	Blocks: 8          IO Block: 4096   directory
+Device: 804h/2052d	Inode: 3278762     Links: 2
+Access: (0755/drwxr-xr-x)  Uid: ( 1000/   n7216)   Gid: ( 1000/   n7216)
+Access: 2019-10-12 18:38:51.259587369 +0200
+Modify: 2019-10-12 18:38:39.943575005 +0200
+Change: 2019-10-12 18:38:39.943575005 +0200
+ Birth: -

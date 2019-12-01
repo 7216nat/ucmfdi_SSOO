@@ -1,0 +1,4 @@
+Xukai Chen
+LAB 11 PUESTO 17
+parece que falta memoria por liberar al crear mtar file
+tambien script no está terminada
