@@ -1,4 +1,4 @@
-#!/bin/bash
+cd #!/bin/bash
 
 # Xukai Chen
 gcc copia.c -o copia 2> error.txt

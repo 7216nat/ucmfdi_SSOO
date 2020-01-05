@@ -8,6 +8,12 @@
 
 #define ALL_LEDS_ON 0x7
 #define ALL_LEDS_OFF 0
+#define SCROLL_LED_ON 0x1
+#define NUM_LED_ON 0x2
+#define CAPS_LED_ON 0x4
+#define SCROLL_NUM_LEDS_ON 0x3
+#define SCROLL_CAPS_LEDS_ON 0x5
+#define NUM_CAPS_LEDS_ON 0x6
 
 
 struct tty_driver* kbd_driver= NULL;

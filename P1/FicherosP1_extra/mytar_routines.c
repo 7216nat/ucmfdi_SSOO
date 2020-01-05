@@ -187,3 +187,64 @@ extractTar(char tarName[])
 	fclose(tarball);
 	return EXIT_SUCCESS;
 }
+
+int removeFromTar(char remName[], char tarName[])
+{
+	FILE *tarball = fopen(tarName, "r");
+	if (tarball == NULL) return EXIT_FAILURE;
+	int nFiles = 0;
+	stHeaderEntry *header = readHeader(tarball, &nFiles);
+	char tarNameNew[strlen(tarName)+6];
+	strncpy(tarNameNew, tarName, strlen(tarName));
+	strcat(tarNameNew, "_TMP_");
+	FILE *tarballNew = fopen(tarNameNew, "w");
+
+	stHeaderEntry *headerNew = malloc(sizeof(stHeaderEntry)*(nFiles-1));
+	int offData = 0;
+
+	offData += (sizeof(int) + (nFiles-1)*sizeof(unsigned int));
+	
+	int i = 0, j = 0;
+	while(i < nFiles-1){
+		if (strcmp(remName, header[j].name)!=0){
+			headerNew[i].name = malloc(strlen(header[j].name)+1);
+			strcpy(headerNew[i].name, header[j].name);
+			offData += (strlen(header[j].name)+1);
+			i++;
+			j++;
+		}
+		else j++;
+	}
+	
+	fseek(tarballNew, offData, SEEK_SET);
+	int k = 0;
+	for(int i = 0; i < nFiles; i++){
+		if (strcmp(remName, header[i].name) != 0){
+			copynFile(tarball, tarballNew, header[i].size);
+			headerNew[k].size = header[i].size;
+			k++;
+		}
+		else fseek(tarball, header[i].size, SEEK_CUR);
+	}
+	fseek(tarballNew, 0, SEEK_SET);
+	int n = nFiles -1;
+	fwrite(&n, sizeof(int), 1, tarballNew);
+	for(int i = 0; i < nFiles-1; i++){
+		fwrite(headerNew[i].name, strlen(headerNew[i].name)+1, 1, tarballNew);
+		fwrite(&headerNew[i].size, sizeof(unsigned int), 1, tarballNew);
+	}
+	for(int i = 0; i < nFiles -1; i++){
+		free(headerNew[i].name);
+	}
+	for(int i = 0; i < nFiles; i++){
+		free(header[i].name);	
+	}
+	free(headerNew);
+	free(header);
+	fclose(tarball);
+	fclose(tarballNew);
+	remove(tarName);
+	rename(tarNameNew, tarName);
+	return EXIT_SUCCESS;
+}
+

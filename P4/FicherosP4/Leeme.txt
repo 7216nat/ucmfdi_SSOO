@@ -1,0 +1,4 @@
+XUKAI CHEN
+LAB11 PT07
+La parte B de la practica lee un numero entero como parametro, y lo reproduce haciendo
+modulo 10 hasta quedar en 0.

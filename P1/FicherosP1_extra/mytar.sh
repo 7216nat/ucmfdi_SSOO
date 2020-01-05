@@ -22,17 +22,9 @@ else
  	mv tarball.mtar out
 
 	cd out
-	../../mytar -x -f tarball.mtar
+	../../mytar -f tarball.mtar -d fichero2.txt
 	
-	if diff fichero1.txt ../fichero1.txt; then
-		echo "fichero1 copiado."
-		if diff fichero2.txt ../fichero2.txt; then
-			echo "fichero2 copiado."
-			if diff fichero3.dat ../fichero3.dat; then
-				echo "fichero3 copiado."
-			fi
-		fi
-	fi
+	../../mytar -x -f tarball.mtar
 fi
 
 
