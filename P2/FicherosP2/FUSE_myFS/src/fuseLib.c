@@ -182,6 +182,7 @@ static int my_getattr(const char *path, struct stat *stbuf)
     if((idxDir = findFileByName(&myFileSystem, (char *)path + 1)) != -1) {
         node = myFileSystem.nodes[myFileSystem.directory.files[idxDir].nodeIdx];
         stbuf->st_size = node->fileSize;
+//	stbuf->st_nlink = node->numLinks;
         stbuf->st_mode = S_IFREG | 0644;
         stbuf->st_nlink = 1;
         stbuf->st_uid = getuid();
@@ -232,7 +233,7 @@ static int my_readdir(const char *path, void *buf, fuse_fill_dir_t filler,  off_
 
     if(strcmp(path, "/") != 0)
         return -ENOENT;
-
+ 
     filler(buf, ".", NULL, 0);
     filler(buf, "..", NULL, 0);
 
@@ -539,6 +540,54 @@ static int my_unlink(const char *path){
     return 0;
 }
 
+/*static int my_link(const char *path,const char *lpath){
+	int indexFilenodePath=-1;
+	if((indexFilenodePath = findFileByName(&myFileSystem, (char *)path + 1)) == -1) {
+		return -ENOENT;
+	}
+	//	if((indexFilenodelpath = findFileByName(&myFileSystem, (char *)lpath + 1)) == -1) {
+	//		return -ENOENT;
+	//	}
+	//	myFileSystem.directory.files[indexFilenodePath].nodeIdx= myFileSystem.directory.files[indexFilenodePath].nodeIdx;
+	//
+	//	strcpy(myFileSystem.directory.files[indexFilenodelpath].fileName, lpath + 1);
+	//	myFileSystem.directory.files[indexFilenodelpath].freeFile=0;
+
+
+	int  idxDir;
+	if((idxDir = findFreeFile(&myFileSystem)) == -1) {
+		return -ENOSPC;
+	}
+
+	// Update root folder
+	myFileSystem.directory.files[idxDir].freeFile = false;
+	myFileSystem.directory.numFiles++;
+	strcpy(myFileSystem.directory.files[idxDir].fileName, lpath + 1);
+	myFileSystem.directory.files[idxDir].nodeIdx = myFileSystem.directory.files[indexFilenodePath].nodeIdx;
+//	myFileSystem.numFreeNodes--;
+	myFileSystem.nodes[indexFilenodePath]->numLinks++;
+
+	sync();
+	updateSuperBlock(&myFileSystem);
+	updateBitmap(&myFileSystem);
+	updateDirectory(&myFileSystem);
+	updateNode(&myFileSystem, indexFilenodePath,myFileSystem.nodes[indexFilenodePath]);
+
+	return 0;
+}*/
+
+static int my_rename(const char *oldpath, const char *newpath){
+	int newIdxDir, oldIdxDir;
+	if((oldIdxDir = findFileByName(&myFileSystem, (char *)oldpath + 1)) != -1){
+		if((newIdxDir = findFileByName(&myFileSystem, (char *)newpath + 1)) != -1){
+			my_unlink(newpath);
+		}
+		strcpy(myFileSystem.directory.files[oldIdxDir].fileName, newpath);
+		my_unlink(oldpath);
+	}
+	return 0;
+}
+
 struct fuse_operations myFS_operations = {
     .getattr	= my_getattr,					// Obtain attributes from a file
     .readdir	= my_readdir,					// Read directory entries
@@ -547,6 +596,8 @@ struct fuse_operations myFS_operations = {
     .write	= my_write,					// Write data into a file already opened
     .read       = my_read,
     .unlink     = my_unlink,
+//    .link       = my_link,
+    .rename     = my_rename,
     .release	= my_release,					// Close an opened file
     .mknod	= my_mknod,					// Create a new file
 };

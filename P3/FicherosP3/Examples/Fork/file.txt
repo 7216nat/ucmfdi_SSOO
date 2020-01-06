@@ -1,4 +1,4 @@
-			 Child. pid=10350 ppid=10346. i=2 a=6 b=6 *p=6
+			 Child. pid=18721 ppid=18717. i=2 a=6 b=6 *p=6
 hild. pid=10314 ppid=10313. i=0 a=2 b=2 *p=2
  Parent. pid=10313 ppid=2020. i=1 a=2 b=2 *p=2
  Parent. pid=10313 ppid=2020. i=2 a=3 b=3 *p=3
