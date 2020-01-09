@@ -1,0 +1,19 @@
+Para compilar un fichero con código C usaremos:
+  gcc [fichero]
+
+Por ejemplo:
+  gcc programa03_05.c
+
+Esto creará un binario llamado a.out que podremos ejecutar con:
+  ./a.out
+
+Si queremos que el binario tenga otro nombre:
+  gcc programa03_05.c -o p05
+
+Ahora ejecutaremos el binario usando:
+  ./p05
+
+Si queremos compilar programas en C que usen librerías que no se encuentran en la librería estándar, como por ejemplo pthread, usaremos:
+  gcc programa03_15.c -pthread
+
+
