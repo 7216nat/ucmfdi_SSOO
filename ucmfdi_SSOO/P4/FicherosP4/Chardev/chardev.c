@@ -118,6 +118,8 @@ static int device_open(struct inode *inode, struct file *file)
     /* Initialize msg */
     sprintf(msg, "I already told you %d times Hello world!\n", counter++);
 
+    printk(KERN_ALERT "Cuenta: %d\n", counter);
+
     /* Initially, this points to the beginning of the message */
     msg_Ptr = msg;
 
@@ -193,6 +195,6 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 static ssize_t
 device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
-    printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
+    printk(KERN_INFO "no soportada.\n");
     return -EPERM;
 }
